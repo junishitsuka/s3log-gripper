@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import sys
-import const, command
+import const, command, validator
 from optparse import OptionParser
 from datetime import datetime as dt
 
@@ -12,7 +12,19 @@ def gripper(argv=sys.argv[1:]):
     if options.list:
         return command.exec_list()
 
-    return command.exec_grip()
+    # validate options
+    if not validator.collection_validate(options.collection):
+        return "invalid collection option"
+    if not validator.date_validate(options.date_from):
+        return "invalid date_from option"
+    if not validator.date_validate(options.date_to):
+        return "invalid date_to option"
+
+    return command.exec_grip(
+        options.collection,
+        options.date_from,
+        options.date_to
+    )
 
 def make_parser():
     parser = OptionParser()
@@ -25,10 +37,10 @@ def make_parser():
     parser.add_option("-c", "--collection", dest="collection",
         help="the target log collection"
     )
-    parser.add_option("-f", "--from", dest="from", default=default_date,
+    parser.add_option("-f", "--from", dest="date_from", default=default_date,
         help="the date of start, format is YYYY-mm-dd"
     )
-    parser.add_option("-t", "--to", dest="to", default=default_date,
+    parser.add_option("-t", "--to", dest="date_to", default=default_date,
         help="the date of end, format is YYYY-mm-dd"
     )
     return parser
