@@ -1,7 +1,10 @@
 # coding: utf-8
 
+import const
+
 def exec_grip():
     pass
 
 def exec_list():
-    pass
+    for l in const.LOG_LIST:
+        print l

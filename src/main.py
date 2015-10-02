@@ -9,7 +9,7 @@ def gripper(argv=sys.argv[1:]):
     parser = make_parser()
     (options, args) = parser.parse_args(argv)
 
-    if options["list"]:
+    if options.list:
         return command.exec_list()
 
     return command.exec_grip()

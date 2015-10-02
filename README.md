@@ -15,6 +15,8 @@ $ python setup.py install
 
 ## How to Use
 
+取得できるログの一覧を表示
+
 ```
-$ gripper
+$ gripper -l
 ```
