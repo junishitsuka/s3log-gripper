@@ -20,6 +20,8 @@
 ```
 $ git clone git@gitlab.boi.tokyo:kpi/s3log-gripper.git
 $ python setup.py install
+$ sudo yum install -y jq
+$ aws configure # set key
 ```
 
 ## How to Use

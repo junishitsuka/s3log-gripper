@@ -2,3 +2,4 @@ build/
 dist/
 gripper.egg-info/
 *.pyc
+output.csv
