@@ -24,6 +24,20 @@ $ sudo yum install -y jq
 $ aws configure # set key
 ```
 
+## Option
+
+設定情報は`src/const.py`に記述されているので、自分の環境に合わせて変更してください。
+
+S3のディレクトリ構成は以下のような想定で実装されています。
+
+`BUCKET_DIR/COLLECTION_NAME/yyyy-mm-dd_i.gz`
+
+or 
+
+`BUCKET_DIR/COLLECTION_NAME/yyyy-mm-dd-hh_i.gz`
+
+`COLLECTION_LIST`は使用可能な`COLLECTION_NAME`のリストとなっています。
+
 ## How to Use
 
 取得できるログの一覧を表示
