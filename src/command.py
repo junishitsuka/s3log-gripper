@@ -21,7 +21,8 @@ def exec_grip(collection, date_from, date_to):
 
 
 def _fetch_file_list(collection, date_from, date_to):
-    cmd = "aws s3 ls s3://%s%s/ --profile cryptract | awk '{date = substr($4, 0, 10); if (date >= \"%s\" && date <= \"%s\") print $4}'" % (
+    # TODO: awscliのprofileをオプションで指定できるようにする
+    cmd = "aws s3 ls s3://%s%s/ | awk '{date = substr($4, 0, 10); if (date >= \"%s\" && date <= \"%s\") print $4}'" % (
        const.BUCKET_DIR, 
        collection,
        date_from,
@@ -37,7 +38,8 @@ def _fetch_file_list(collection, date_from, date_to):
 
 
 def _fetch_log_files(fname, collection):
-    cmd = "aws s3 cp s3://%s%s/%s --profile cryptract ./" % (
+    # TODO: awscliのprofileをオプションで指定できるようにする
+    cmd = "aws s3 cp s3://%s%s/%s ./" % (
         const.BUCKET_DIR,
         collection,
         fname
