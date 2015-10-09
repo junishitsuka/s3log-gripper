@@ -8,21 +8,21 @@ def exec_list():
         print l
     return
 
-def exec_grip(collection, date_from, date_to):
-    file_list = _fetch_file_list(collection, date_from, date_to)
+def exec_grip(collection, date_from, date_to, profile):
+    file_list = _fetch_file_list(collection, date_from, date_to, profile)
     for fname in file_list:
-       _fetch_log_files(fname, collection)
+       _fetch_log_files(fname, collection, profile)
 
     list_str = " ".join([x[:-3] for x in file_list])
     _export_csv_files(list_str)
     _remove_log_files(list_str)
     return
 
-def _fetch_file_list(collection, date_from, date_to):
-    # TODO: awscliのprofileをオプションで指定できるようにする
-    cmd = "aws s3 ls s3://%s%s/ | awk '{date = substr($4, 0, 10); if (date >= \"%s\" && date <= \"%s\") print $4}'" % (
+def _fetch_file_list(collection, date_from, date_to, profile):
+    cmd = "aws s3 ls s3://%s%s/ --profile %s | awk '{date = substr($4, 0, 10); if (date >= \"%s\" && date <= \"%s\") print $4}'" % (
        const.BUCKET_DIR,
        collection,
+       profile,
        date_from,
        date_to
     )
@@ -34,12 +34,12 @@ def _fetch_file_list(collection, date_from, date_to):
 
     return [x for x in stdout_data.split("\n") if x != ""]
 
-def _fetch_log_files(fname, collection):
-    # TODO: awscliのprofileをオプションで指定できるようにする
-    cmd = "aws s3 cp s3://%s%s/%s ./" % (
+def _fetch_log_files(fname, collection, profile):
+    cmd = "aws s3 cp s3://%s%s/%s ./ --profile %s" % (
         const.BUCKET_DIR,
         collection,
-        fname
+        fname,
+        profile
     )
 
     stdout_data, stderr_data = _exec_command(cmd)

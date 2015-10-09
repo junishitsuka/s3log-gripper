@@ -23,7 +23,8 @@ def gripper(argv=sys.argv[1:]):
     return command.exec_grip(
         options.collection,
         options.date_from,
-        options.date_to
+        options.date_to,
+        options.profile
     )
 
 def make_parser():
@@ -42,5 +43,8 @@ def make_parser():
     )
     parser.add_option("-t", "--to", dest="date_to", default=default_date,
         help="the date of end, format is YYYY-mm-dd"
+    )
+    parser.add_option("-p", "--profile", dest="profile", default="default",
+        help="aws profile"
     )
     return parser

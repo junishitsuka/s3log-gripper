@@ -51,3 +51,9 @@ $ gripper -l
 ```
 $ gripper -c payment -f 2015-04-01 -t 2015-04-03
 ```
+
+`awscli`の`profile`オプションを指定してログを取得
+
+```
+$ gripper -c payment -f 2015-04-01 -t 2015-04-03 -p default
+```
