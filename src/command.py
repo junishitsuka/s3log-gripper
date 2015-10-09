@@ -1,13 +1,12 @@
 # coding: utf-8
 
 import const, subprocess
-
+import sys
 
 def exec_list():
     for l in const.COLLECTION_LIST:
         print l
     return
-
 
 def exec_grip(collection, date_from, date_to):
     file_list = _fetch_file_list(collection, date_from, date_to)
@@ -19,11 +18,10 @@ def exec_grip(collection, date_from, date_to):
     _remove_log_files(list_str)
     return
 
-
 def _fetch_file_list(collection, date_from, date_to):
     # TODO: awscliのprofileをオプションで指定できるようにする
     cmd = "aws s3 ls s3://%s%s/ | awk '{date = substr($4, 0, 10); if (date >= \"%s\" && date <= \"%s\") print $4}'" % (
-       const.BUCKET_DIR, 
+       const.BUCKET_DIR,
        collection,
        date_from,
        date_to
@@ -35,7 +33,6 @@ def _fetch_file_list(collection, date_from, date_to):
         raise Exception(stderr_data)
 
     return [x for x in stdout_data.split("\n") if x != ""]
-
 
 def _fetch_log_files(fname, collection):
     # TODO: awscliのprofileをオプションで指定できるようにする
@@ -57,22 +54,22 @@ def _fetch_log_files(fname, collection):
 
     return True
 
-
 def _export_csv_files(list_str):
-    cmd = "cat %s | cut -f 3- | jq -r 'to_entries | [.[].key] | @csv' | head -n 1 > %s" % (
-        list_str,
-        const.OUT_FILE
-    )
+    # 先頭のレコードのキーを信頼する（配列, オブジェクトは除く）
+    cmd = "head -n 1 %s | cut -f 3- | jq -r 'to_entries | [.[].key] | select(map(type) != \"array\" and map(type) != \"object\") | @csv' | sed -e 's/\"//g'" % list_str
     stdout_data, stderr_data = _exec_command(cmd)
 
-    cmd = "cat %s | cut -f 3- | jq -r 'to_entries | [.[].value] | @csv' >> %s" % (
+    keys = ["\(.%s)" % str(x.rstrip()) for x in stdout_data.split(",")]
+    key_query = ",".join(keys)
+
+    cmd = "cat %s | cut -f 3- | jq \\\"\"%s\"\\\" | sed -e 's/\"//g' >> %s" % (
         list_str,
+        key_query,
         const.OUT_FILE
     )
     stdout_data, stderr_data = _exec_command(cmd)
 
     return True
-
 
 def _remove_log_files(list_str):
     stdout_data, stderr_data = _exec_command("rm -rf %s" % list_str)
@@ -81,7 +78,6 @@ def _remove_log_files(list_str):
         raise Exception(stderr_data)
 
     return True
-
 
 def _exec_command(cmd):
     proc = subprocess.Popen(
