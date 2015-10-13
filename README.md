@@ -18,7 +18,7 @@
 ## Set up
 
 ```
-$ git clone git@gitlab.boi.tokyo:kpi/s3log-gripper.git
+$ git clone git@github.com:junishitsuka/s3log-gripper.git
 $ python setup.py install
 $ sudo yum install -y jq
 $ aws configure # set key
@@ -53,11 +53,11 @@ $ gripper -l
 期間を指定してログを取得
 
 ```
-$ gripper -c payment -f 2015-04-01 -t 2015-04-03
+$ gripper -c login -f 2015-04-01 -t 2015-04-03
 ```
 
 `awscli`の`profile`オプションを指定してログを取得
 
 ```
-$ gripper -c payment -f 2015-04-01 -t 2015-04-03 -p default
+$ gripper -c login -f 2015-04-01 -t 2015-04-03 -p default
 ```
