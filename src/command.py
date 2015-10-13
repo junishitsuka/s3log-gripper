@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import const, subprocess
-import sys
+import sys, os
 
 def exec_list():
     for l in const.COLLECTION_LIST:
@@ -9,6 +9,12 @@ def exec_list():
     return
 
 def exec_grip(collection, date_from, date_to, profile):
+    if os.path.exists(const.OUT_FILE):
+        try:
+            os.remove(const.OUT_FILE)
+        except Exception, e:
+            raise Exception(e)
+
     file_list = _fetch_file_list(collection, date_from, date_to, profile)
     for fname in file_list:
        _fetch_log_files(fname, collection, profile)
