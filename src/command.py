@@ -56,7 +56,7 @@ def _fetch_log_files(fname, collection, profile):
 
 def _export_csv_files(list_str):
     # 先頭のレコードのキーを信頼する（配列, オブジェクトは除く）
-    cmd = "head -n 1 %s | cut -f 3- | jq -r 'to_entries | [.[].key] | select(map(type) != \"array\" and map(type) != \"object\") | @csv' | sed -e 's/\"//g'" % list_str
+    cmd = "cat %s | head -n 1 | cut -f 3- | jq -r 'to_entries | [.[].key] | select(map(type) != \"array\" and map(type) != \"object\") | @csv' | sed -e 's/\"//g'" % list_str
     stdout_data, stderr_data = _exec_command(cmd)
 
     keys = ["\(.%s)" % str(x.rstrip()) for x in stdout_data.split(",")]
