@@ -19,6 +19,7 @@
 
 ```
 $ git clone git@github.com:junishitsuka/s3log-gripper.git
+$ cd s3log-gripper.git
 $ python setup.py install
 $ sudo yum install -y jq
 $ aws configure # set key
